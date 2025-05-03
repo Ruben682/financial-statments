@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Financial System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+      color: #333;
+    }
+    h2 {
+      background-color: #003366;
+      color: white;
+      padding: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background-color: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #005a9e;
+      color: white;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 6px;
+    }
+    input[readonly] {
+      background-color: #f0f0f0;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Income Statement (Profit or Loss)</h2>
+  <table>
+    <tr><th>Item</th><th>Amount</th></tr>
+    <tr><td>Sales</td><td><input type="number" id="sales" oninput="calculate()"></td></tr>
+    <tr><td>Return Inwards</td><td><input type="number" id="returnIn" oninput="calculate()"></td></tr>
+    <tr><td>Commission Received</td><td><input type="number" id="commission" oninput="calculate()"></td></tr>
+    <tr><td>Opening Stock</td><td><input type="number" id="openingStock" oninput="calculate()"></td></tr>
+    <tr><td>Purchases</td><td><input type="number" id="purchases" oninput="calculate()"></td></tr>
+    <tr><td>Return Outwards</td><td><input type="number" id="returnOut" oninput="calculate()"></td></tr>
+    <tr><td>Carriage Inwards</td><td><input type="number" id="carriageIn" oninput="calculate()"></td></tr>
+    <tr><td>Closing Stock</td><td><input type="number" id="closingStock" oninput="calculate()"></td></tr>
+    <tr><td>Admin Salaries & Wages</td><td><input type="number" id="salaries" oninput="calculate()"></td></tr>
+    <tr><td>Rent</td><td><input type="number" id="rent" oninput="calculate()"></td></tr>
+    <tr><td>Light and Heat</td><td><input type="number" id="light" oninput="calculate()"></td></tr>
+    <tr><td>General Office Expenses</td><td><input type="number" id="office" oninput="calculate()"></td></tr>
+    <tr><td>Carriage Outwards</td><td><input type="number" id="carriageOut" oninput="calculate()"></td></tr>
+    <tr><td>Other Expenses</td><td><input type="number" id="other" oninput="calculate()"></td></tr>
+    <tr><th>Net Profit</th><th><input type="text" id="netProfit" readonly></th></tr>
+  </table>
+
+  <h2>Balance Sheet (Statement of Financial Position)</h2>
+  <table>
+    <tr><th>Assets</th><th>Amount</th></tr>
+    <tr><td>Cash in Hand</td><td><input type="number" id="cash" oninput="calculate()"></td></tr>
+    <tr><td>Bank</td><td><input type="number" id="bank" oninput="calculate()"></td></tr>
+    <tr><td>Debtors</td><td><input type="number" id="debtors" oninput="calculate()"></td></tr>
+    <tr><td>Closing Stock</td><td><input type="number" id="closingStock2" oninput="calculate()"></td></tr>
+    <tr><td>Plant & Machinery</td><td><input type="number" id="plant" oninput="calculate()"></td></tr>
+    <tr><th>Total Assets</th><th><input type="text" id="totalAssets" readonly></th></tr>
+  </table>
+
+  <table>
+    <tr><th>Liabilities & Equity</th><th>Amount</th></tr>
+    <tr><td>Creditors</td><td><input type="number" id="creditors" oninput="calculate()"></td></tr>
+    <tr><td>Capital</td><td><input type="number" id="capital" oninput="calculate()"></td></tr>
+    <tr><td>Net Profit (From Income Statement)</td><td><input type="text" id="netProfit2" readonly></td></tr>
+    <tr><th>Total Liabilities + Equity</th><th><input type="text" id="totalLiabilities" readonly></th></tr>
+  </table>
+
+  <script>
+    function calculate() {
+      let sales = parseFloat(document.getElementById('sales').value) || 0;
+      let returnIn = parseFloat(document.getElementById('returnIn').value) || 0;
+      let commission = parseFloat(document.getElementById('commission').value) || 0;
+      let netSales = (sales - returnIn) + commission;
+
+      let openingStock = parseFloat(document.getElementById('openingStock').value) || 0;
+      let purchases = parseFloat(document.getElementById('purchases').value) || 0;
+      let returnOut = parseFloat(document.getElementById('returnOut').value) || 0;
+      let carriageIn = parseFloat(document.getElementById('carriageIn').value) || 0;
+      let closingStock = parseFloat(document.getElementById('closingStock').value) || 0;
+
+      let costOfGoodsSold = openingStock + purchases - returnOut + carriageIn - closingStock;
+
+      let salaries = parseFloat(document.getElementById('salaries').value) || 0;
+      let rent = parseFloat(document.getElementById('rent').value) || 0;
+      let light = parseFloat(document.getElementById('light').value) || 0;
+      let office = parseFloat(document.getElementById('office').value) || 0;
+      let carriageOut = parseFloat(document.getElementById('carriageOut').value) || 0;
+      let other = parseFloat(document.getElementById('other').value) || 0;
+
+      let totalExpenses = salaries + rent + light + office + carriageOut + other;
+      let netProfit = netSales - (costOfGoodsSold + totalExpenses);
+
+      document.getElementById('netProfit').value = netProfit;
+      document.getElementById('netProfit2').value = netProfit;
+
+      // BALANCE SHEET
+      let cash = parseFloat(document.getElementById('cash').value) || 0;
+      let bank = parseFloat(document.getElementById('bank').value) || 0;
+      let debtors = parseFloat(document.getElementById('debtors').value) || 0;
+      let closingStock2 = parseFloat(document.getElementById('closingStock2').value) || 0;
+      let plant = parseFloat(document.getElementById('plant').value) || 0;
+
+      let totalAssets = cash + bank + debtors + closingStock2 + plant;
+      document.getElementById('totalAssets').value = totalAssets;
+
+      let creditors = parseFloat(document.getElementById('creditors').value) || 0;
+      let capital = parseFloat(document.getElementById('capital').value) || 0;
+      let totalLiabilities = creditors + capital + netProfit;
+
+      document.getElementById('totalLiabilities').value = totalLiabilities;
+    }
+  </script>
+
+</body>
+</html>
